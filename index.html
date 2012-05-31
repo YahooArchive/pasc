@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Pasc : Practical Arbitrary State Corruptions" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Pasc</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/yahoo/pasc">View on GitHub</a>
+
+          <h1 id="project_title">Pasc</h1>
+          <h2 id="project_tagline">Practical Arbitrary State Corruptions</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/yahoo/pasc/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/yahoo/pasc/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>PASC</h1>
+
+<p>PASC is a Java library that automates the detection of Arbitrary State Corruptions in processes of a distributed system.</p>
+
+<p>Fault-tolerant distributed systems need to tolerate not only crashes but also random data corruptions due to disk failures, bit-flips in memory, or CPU/bus errors. These random errors can propagate and have unpredictable effects. However, manually adding error detection checks is cumbersome and difficult. Which checks need to be added? Where to place them? What if the variables used for the checks are themselves corrupted?</p>
+
+<p>The motivation behind PASC is that developers should not care about these problems. They should focus on making their distributed system crash-tolerant. The PASC library wraps the processes of the system and takes care of executing all the checks that are necessary to transform arbitrary state corruptions into crashes and dropped messages. All this is transparent to the application. If a faulty process wrapped with PASC sends a corrupted messages, this corruption is exposed to the receiver, which discards the message. </p>
+
+<p>If you have any question, please contact us at <a href="mailto:pasc-library@yahoogroups.com">pasc-library@yahoogroups.com</a></p>
+
+<h2>How to use PASC?</h2>
+
+<p>A message-passing distributed systems consists of processes. Processes can be modeled as collections of message handlers, each processing a different type of messages. All message handlers modify the state of the process.</p>
+
+<p>A PASC process is implemented by specifying classes describing the <strong>process state</strong>, <strong>event handlers</strong> and the <strong>messages</strong> using the templates provided by the library.</p>
+
+<h2>Architecture</h2>
+
+<p>The PASC library uses five techniques to handle ASC faults: state replication, redundant message handling, updates comparison, control-flow checks, and message verification. The main entry point to the library is the PascRuntime, which is responsible for dispachting messages and executing the message handlers guaranteeing ASC invariants. The user defined state is replicated and the message handlers are executed twice, checking that the result is always the same.</p>
+
+<h3>Including PASC in a distributed system</h3>
+
+<p>The PASC runtime is initialized when the process is started. </p>
+
+<pre><code>final PascRuntime runtime = new PascRuntime(protection);
+</code></pre>
+
+<p>The protection flag allows to turn off PASC if needed.</p>
+
+<p>The initialization procedure must pass the process state, message handler and message classes used to the runtime. During the normal operations, all is needed to process an input message is to tell the runtime to handle the message. </p>
+
+<pre><code>List&lt;Message&gt; outputMessages = runtime.handleMessage(inputMessage)
+</code></pre>
+
+<h2>Compilation</h2>
+
+<p>The library is implemented in Java and depends on several other projects:</p>
+
+<ul>
+<li>Javassist</li>
+<li>asm</li>
+<li>StringTemplate (ANTLR)</li>
+<li>Objenesis</li>
+<li>Cloning</li>
+</ul><p>Pasc uses maven as its buildsystem. Compile with</p>
+
+<pre><code>$ mvn install
+</code></pre>
+
+<p>Tests should run cleanly.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Pasc maintained by <a href="https://github.com/yahoo">yahoo</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
